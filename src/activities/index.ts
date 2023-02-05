@@ -1,9 +1,15 @@
-export async function activityA(): Promise<void> {
-  console.log('activityA');
+export async function getUserInformation(): Promise<{ name: string }> {
+  console.log('Get user information');
+
+  return {
+    name: 'John State',
+  };
 }
-export async function activityB(): Promise<void> {
-  console.log('activityB');
+
+export async function billUser(): Promise<void> {
+  console.log('Bill user');
 }
-export async function activityThatMustRunAfterA(): Promise<void> {
-  console.log('activityThatMustRunAfterA');
+
+export async function sendEmail(): Promise<void> {
+  console.log('Send email to user');
 }

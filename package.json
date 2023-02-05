@@ -26,7 +26,8 @@
     "@temporalio/workflow": "^1.6.0",
     "axios": "0.26.0",
     "eslint": "7",
-    "node-fetch": "2.x"
+    "node-fetch": "2.x",
+    "xstate": "^4.35.4"
   },
   "devDependencies": {
     "@tsconfig/node17": "^1.0.0",
