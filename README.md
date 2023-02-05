@@ -2,6 +2,10 @@
 
 Adapted from https://github.com/temporalio/samples-typescript/tree/main/patching-api
 
+Watch to understand workflows versioning with Temporal: https://www.youtube.com/watch?v=kkP899WxgzY&ab_channel=Temporal
+
+## How it works
+
 We have a base workflow (`src/workflows-v1.ts`), that charges a user every month.
 
 After the workflow is alive, we want to update it to email the user after charging. We use a `patch` to do that. See `src/workflows-v2.ts`. It will make workflows created before the patch send the email, and workflows created after the patch is released will directly send emails.
