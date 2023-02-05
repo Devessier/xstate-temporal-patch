@@ -3,7 +3,7 @@ import { createMachine, interpret } from 'xstate';
 import type * as activities from './activities';
 
 const machine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QFVZgE4AIBmAbA9gO4B0A4mAC4UCWAdlJgK5roDksmd2+6AtgIY18tAMQRhYYnQBu+ANaTUGHARLkqdBswztOtbn0HVhCGfgDGR4QG0ADAF079xKAAO+WNSG0XIAB6IAMwATACcxADswcEAbIEArAAc8TExACwRMQA0IACeiACMwYHE8bYFaRkFthERBbVpAL6NOUpYeETEAELUuLiaTCxiElK0sgrEbSqdPX0D2uimYxZWtE5Ovu6e3r4BCKG24TGhabFFaQUF8Zk5+QjBacSBV6HxabYxtsWxH82tLNMSAB1fheAYGTC0MB+CiYcwAC346CgmhEflgFEEkn42AoGAAFAVMLxhBR4QBKERTDrA0E0eg4HiQ6GwhFIlH0DZIEBbMHCXaIRKZYgVRIfQJpQKfCKhRK3RDBRKPRXxYLxdWqiUxWp-EDU1TEADKYFoEAGYAEvUwFHwg2UhC88MwACNev0GVweAJvMMoaNxooATSjSazQyLaDcNbbQtMA6yS63QNPYZvEtZJZvOsHJsPHyfNy9gVAjViO9gocS2lEoFQgV5QgiiUyhUQurytq0vFmi0QLR8BA4L59URc9tjAXQEXgg2ALSJRIipVxAo12r1Ve6kdqSj0rQsXQp70Tsf5gUIT4N2Vl0IRKUZD62JW2QJboMG2bu-cYU87QuIGJV2IWw3kSK4IjSOJVSvRc0lve8IkfZ8ml7bdiBBMEGQhKEYThRFkU0X8T3-RtggieJiFiRJolCEIIIueIGwrGJgMlSDEjrS5yLfZRg2NU1zUtKMbTtLB4ydV05g9fQvVWIj+RIooXyeNVEnSdIDnqOdbGIGIFy4q53iKCI1JiHtGiAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QFVZgE4AIBmAbA9gO4B0A4mAC4UCWAdlJgK5roDksmd2+6AtgIY18tAMQRhYYnQBu+ANaTUGHARLkqdBswztOtbn0HVhCGfgDGR4QG0ADAF079xKAAO+WNSG0XIAB6IAMwATACcxADswcEAbIEArAAc8TExACwRMQA0IACeiACMwYHE8bYFaRkFthERBbVpAL6NOUpYeETEAELUuLiaTCxiElK0sgrEbSqdPX0D2uimYxZWtE5Ovu6e3r4BCIkxicSBtqGJtvEZcZcFOfkIBcfxmakptsFp5aERTS0gUx0SAB1fheAYGTC0MB+CiYcwAC346CgmhEflgFEEkn42AoGAAFAVMLxhBR4QBKEQA1TEEFg+g4HiQ6GwhFIlH0DZIEBbMHCXaIRKZYgVc5xNKBGI1M53RDBRJpYjy+LBeJqlWBNIxWrNVosaYkADKYFoEAGYAEvUwFHwg2UhC88MwACNev0GVweAJvMMoaNxop9YDiMbTebLbhrbaFpgHWSXW6Bp7DN4lrJLN51g5Nh4+T5uXsCicIsRPsFTic0olAqFbnlCsVSuUJaqygVtWl4s0-rR8BA4L5qUQc9tjPnQIXgrKEABaRJHAoKmJFIUrquJXX-IM09Q0BkLXTJ71jkd5gUIKXTs6l76SjK2KUK2yBTdDkizd1aFinnYFxDLo4LirApni1BIp3rBBrzSW90giB9bCfX49WUYM6T3BgIShGE4URZFNB-E8-weYIIniJVDmiUIQh+NIQOncsYmIWwJS1RJawKeouz+N8QxNM0GQtUFIxtO0sDjJ1XTmD19C9VZCP5YiimfY5VQOLUYPKCJpxnWxiEORJOLqS5ylIg4Ym7RogA */
   createMachine({
     id: 'User flow',
 
@@ -18,7 +18,10 @@ const machine =
       'Billing user': {
         invoke: {
           src: 'Bill user',
-          onDone: 'Sending email to user with billing information',
+          onDone: {
+            target: 'Sending email to user with billing information',
+            actions: 'Deprecate my-change-id patch',
+          },
         },
       },
 
@@ -48,8 +51,6 @@ const { getUserInformation, billUser, sendEmail } = proxyActivities<typeof activ
 export const workflowId = 'patching-workflows-v3';
 // v3
 export async function myWorkflow(): Promise<void> {
-  deprecatePatch('my-change-id')
-
   const service = interpret(
     machine.withConfig({
       services: {
@@ -59,6 +60,9 @@ export async function myWorkflow(): Promise<void> {
       },
       delays: {
         '1 month': 10_000, // 1 month is 10 seconds
+      },
+      actions: {
+        'Deprecate my-change-id patch': () => deprecatePatch('my-change-id'),
       },
     })
   ).start();

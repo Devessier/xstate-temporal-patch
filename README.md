@@ -12,4 +12,6 @@ After the workflow is alive, we want to update it to email the user after chargi
 
 When workflows that were started before the patch are all terminated, we can deprecate the patch with `deprecatePatch`. See `src/workflows-v3.ts`.
 
+`deprecatePatch` must be called where we were calling `patch`. If `patch` was in a guard, we must remove the guard and replace it with an action calling `deprecatePatch`.
+
 Once all workflows that were run with the patch are terminated, we can remove the call to `deprecatePatch`, and we end up with the final code. See `src/workflows-vFinal.ts`.
